@@ -1,0 +1,20 @@
+# General OS info
+os_type: "bit32"
+
+# General OS info
+os_name: "FAMP_test"
+os_vers: "1.0.1"
+pref_FS: "custom"
+production_stage: "yes"
+
+# Disk image name
+disk_name: "test_disk"
+auto_format: "no"
+
+# Bin folder
+bin_folder: "bin"
+
+# Kernel
+kernel_o_binary: "bin/kernel.o"
+kernel_bin_filename: "bin/kernel.bin"
+kernel_source_code_file: "kernel.c"

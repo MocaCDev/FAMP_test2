@@ -1,0 +1,52 @@
+static inline void __setup_gdt_and_gdt_desc()
+{
+#ifdef default_gdt
+    /* If `gdt_status` is 1, that means there is a already-working GDT/GDT descriptor loaded into memory. */
+    /* If `gdt_status` is 0, that means there needs to be a working GDT/GDT descriptor loaded into memory */
+    if(*gdt_status == 0)
+    {
+        g_gdt_address->null_desc          = 0,
+
+        /* 32-bit code segment. */
+        g_gdt_address->code32_limit       = 0xFFFF;
+        g_gdt_address->code32_base        = 0x0;
+        g_gdt_address->code32_base2       = 0x0;
+        g_gdt_address->code32_access      = 0b10011010;
+        g_gdt_address->code32_gran        = 0b11001111;
+        g_gdt_address->code32_base_high   = 0x0;
+
+        /* 32-bit data segment. */
+        g_gdt_address->data32_limit       = 0xFFFF;
+        g_gdt_address->data32_base        = 0x0;
+        g_gdt_address->data32_base2       = 0x0;
+        g_gdt_address->data32_access      = 0b10010010;
+        g_gdt_address->data32_gran        = 0b11001111;
+        g_gdt_address->data32_base_high   = 0x0;
+
+        /* Only fill out 16-bit segments if we have it. */
+#ifdef has_rmode_access
+        /* 16-bit code segment. */
+        g_gdt_address->code16_limit       = 0xFFFF;
+        g_gdt_address->code16_base        = 0x0;
+        g_gdt_address->code16_base2       = 0x0;
+        g_gdt_address->code16_access      = 0b10011010;
+        g_gdt_address->code16_gran        = 0b00001111;
+        g_gdt_address->code16_base_high    = 0x0;
+
+        /* 16-bit data segment. */
+        g_gdt_address->data16_limit       = 0xFFFF;
+        g_gdt_address->data16_base        = 0x0;
+        g_gdt_address->data16_base2       = 0x0;
+        g_gdt_address->data16_access      = 0b10010010;
+        g_gdt_address->data16_gran        = 0b00001111;
+        g_gdt_address->data16_base_high   = 0x0;
+#endif
+
+        /* Setup the description for the GDT. */
+        g_gdt_desc_address->size = (uint16)sizeof(*g_gdt_address);
+        g_gdt_desc_address->address = (uint32)g_gdt_address;
+
+        set_gdt_status(BIT16_BIT32_GDT);
+    }
+#endif
+}
